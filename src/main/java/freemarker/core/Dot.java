@@ -21,6 +21,7 @@ package freemarker.core;
 
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateHashModelWithHinting;
 import freemarker.template.TemplateModel;
 
 /**
@@ -38,8 +39,15 @@ final class Dot extends Expression {
 
     @Override
     TemplateModel _eval(Environment env) throws TemplateException {
-        TemplateModel leftModel = target.eval(env);
+        return _eval(env, null);
+    }
+    @Override
+    TemplateModel _eval(Environment env, Class hint) throws TemplateException {
+        TemplateModel leftModel = target.eval(env, hint);
         if (leftModel instanceof TemplateHashModel) {
+            if (leftModel instanceof TemplateHashModelWithHinting) {
+                return ((TemplateHashModelWithHinting) leftModel).get(key, hint);
+            }
             return ((TemplateHashModel) leftModel).get(key);
         }
         if (leftModel == null && env.isClassicCompatible()) {

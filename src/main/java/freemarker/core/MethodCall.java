@@ -52,7 +52,7 @@ final class MethodCall extends Expression {
 
     @Override
     TemplateModel _eval(Environment env) throws TemplateException {
-        TemplateModel targetModel = target.eval(env);
+        TemplateModel targetModel = target.eval(env, TemplateMethodModel.class);
         if (targetModel instanceof TemplateMethodModel) {
             TemplateMethodModel targetMethod = (TemplateMethodModel) targetModel;
             List argumentStrings = 

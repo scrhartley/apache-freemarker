@@ -48,7 +48,15 @@ abstract public class Expression extends TemplateObject {
      *     during template execution).
      */
     abstract TemplateModel _eval(Environment env) throws TemplateException;
-    
+    /**
+     * @param env might be {@code null}, if this kind of expression can be evaluated during parsing (as opposed to
+     *     during template execution).
+     * @param hint {@code null} unless we want to provide a hint to decide how to evaluate the expression
+     */
+    TemplateModel _eval(Environment env, Class hint) throws TemplateException {
+        return _eval(env);
+    }
+
     abstract boolean isLiteral();
 
     // Used to store a constant return value for this expression. Only if it
@@ -95,10 +103,13 @@ abstract public class Expression extends TemplateObject {
     void enableLazilyGeneratedResult() {
         // Has no effect by default
     }
-    
+
     final TemplateModel eval(Environment env) throws TemplateException {
+        return eval(env, null);
+    }
+    final TemplateModel eval(Environment env, Class hint) throws TemplateException {
         try {
-            return constantValue != null ? constantValue : _eval(env);
+            return constantValue != null ? constantValue : _eval(env, hint);
         } catch (FlowControlException | TemplateException e) {
             throw e;
         } catch (Exception e) {

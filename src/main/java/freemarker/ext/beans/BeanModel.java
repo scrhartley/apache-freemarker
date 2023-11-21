@@ -43,6 +43,8 @@ import freemarker.template.SimpleScalar;
 import freemarker.template.SimpleSequence;
 import freemarker.template.TemplateCollectionModel;
 import freemarker.template.TemplateHashModelEx;
+import freemarker.template.TemplateHashModelWithHinting;
+import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateModelIterator;
@@ -61,7 +63,7 @@ import freemarker.template.utility.StringUtil;
  */
 
 public class BeanModel
-implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, TemplateModelWithAPISupport {
+implements TemplateHashModelEx, TemplateHashModelWithHinting, AdapterTemplateModel, WrapperTemplateModel, TemplateModelWithAPISupport {
     private static final Logger LOG = Logger.getLogger("freemarker.beans");
     protected final Object object;
     protected final BeansWrapper wrapper;
@@ -139,7 +141,12 @@ implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, Temp
      * a generic <tt>get</tt> method to invoke.
      */
     @Override
-    public TemplateModel get(String key)
+    public TemplateModel get(String key) throws TemplateModelException {
+        return get(key, null);
+    }
+
+    @Override
+    public TemplateModel get(String key, Class hint)
         throws TemplateModelException {
         Class<?> clazz = object.getClass();
         Map<Object, Object> classInfo = wrapper.getClassIntrospector().get(clazz);
@@ -149,7 +156,7 @@ implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, Temp
             if (wrapper.isMethodsShadowItems()) {
                 Object fd = classInfo.get(key);
                 if (fd != null) {
-                    retval = invokeThroughDescriptor(fd, classInfo);
+                    retval = invokeThroughDescriptor(fd, classInfo, hint);
                 } else {
                     retval = invokeGenericGet(classInfo, clazz, key);
                 }
@@ -161,7 +168,7 @@ implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, Temp
                 }
                 Object fd = classInfo.get(key);
                 if (fd != null) {
-                    retval = invokeThroughDescriptor(fd, classInfo);
+                    retval = invokeThroughDescriptor(fd, classInfo, hint);
                     if (retval == UNKNOWN && model == nullModel) {
                         // This is the (somewhat subtle) case where the generic get() returns null
                         // and we have no bean info, so we respect the fact that
@@ -204,7 +211,7 @@ implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, Temp
         return wrapper.getClassIntrospector().get(object.getClass()).get(ClassIntrospector.GENERIC_GET_KEY) != null;
     }
     
-    private TemplateModel invokeThroughDescriptor(Object desc, Map<Object, Object> classInfo)
+    private TemplateModel invokeThroughDescriptor(Object desc, Map<Object, Object> classInfo, Class returnHint)
             throws IllegalAccessException, InvocationTargetException, TemplateModelException {
         // See if this particular instance has a cached implementation for the requested feature descriptor
         TemplateModel cachedModel;
@@ -229,6 +236,10 @@ implements TemplateHashModelEx, AdapterTemplateModel, WrapperTemplateModel, Temp
                         new SimpleMethodModel(object, indexedReadMethod, 
                                 ClassIntrospector.getArgTypes(classInfo, indexedReadMethod), wrapper);
                 }
+            } else if (returnHint == TemplateMethodModel.class && desc instanceof RecordComponentDescriptor) {
+                resultModel = new SimpleMethodModel(object, pd.getReadMethod(), new Class[0], wrapper);
+                // cachedModel remains null, as we don't want to accidentally return a method
+                // when the caller hasn't hinted that they want one
             } else {
                 resultModel = wrapper.invokeMethod(object, pd.getReadMethod(), null);
                 // cachedModel remains null, as we don't cache these

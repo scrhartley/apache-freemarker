@@ -329,6 +329,16 @@ class ClassIntrospector {
             Map<Object, Object> introspData, Class<?> clazz,
             Map<ExecutableMemberSignature, List<Method>> accessibleMethods,
             ClassMemberAccessPolicy effClassMemberAccessPolicy) throws IntrospectionException {
+        if (isRecordType(clazz)) {
+            Method[] accessors = RecordAccessor.instance().getAccessors(clazz);
+            for (Method accessor : accessors) {
+                if (effClassMemberAccessPolicy.isMethodExposed(accessor)) {
+                    introspData.put(accessor.getName(), new RecordComponentDescriptor(accessor));
+                }
+            }
+            return; // Proof-of-concept, so don't try to implement the rest
+        }
+
         BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
         List<PropertyDescriptor> pdas = getPropertyDescriptors(beanInfo, clazz);
         int pdasLength = pdas.size();
@@ -507,6 +517,11 @@ class ClassIntrospector {
             }
         }
         return mergedPDs;
+    }
+
+    private static boolean isRecordType(Class<?> clazz) {
+        Class<?> parent = clazz.getSuperclass();
+        return (parent != null) && "java.lang.Record".equals(parent.getName());
     }
 
     private static class PropertyReaderMethodPair {

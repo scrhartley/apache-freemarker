@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
  * 
  * @since 2.3.27
  */
-final class FastPropertyDescriptor {
+class FastPropertyDescriptor {
     private final Method readMethod;
     private final Method indexedReadMethod;
     
