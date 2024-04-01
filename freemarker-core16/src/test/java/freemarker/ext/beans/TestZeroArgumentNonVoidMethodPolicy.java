@@ -115,12 +115,12 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
     }
 
     @Test
-    public void testDefaultWithNonRecordsPropertyOnly() throws TemplateException, IOException {
+    public void testDefaultWithDefaultPropertyOnly() throws TemplateException, IOException {
         for (boolean cacheTopLevelVars : List.of(true, false)) {
             setupDataModel(
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_32);
-                        beansWrapper.setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY);
+                        beansWrapper.setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -135,7 +135,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
             setupDataModel(
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_33);
-                        beansWrapper.setNonRecordZeroArgumentNonVoidMethodPolicy(
+                        beansWrapper.setDefaultZeroArgumentNonVoidMethodPolicy(
                                 ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD);
                         return beansWrapper;
                     },
@@ -149,7 +149,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
     public void testSettings() throws TemplateException, IOException {
             getConfiguration().setSetting(
                     "objectWrapper",
-                    "DefaultObjectWrapper(2.3.33, nonRecordZeroArgumentNonVoidMethodPolicy=freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD)");
+                    "DefaultObjectWrapper(2.3.33, defaultZeroArgumentNonVoidMethodPolicy=freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD)");
             setupDataModel(() -> getConfiguration().getObjectWrapper(), false);
             assertRecIsBothPropertyAndMethod();
             assertNrcIsBothPropertyAndMethod();
@@ -162,7 +162,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
         setDataModel(cacheTopLevelVars ? new SimpleHash(objectWrapper) : new HashMap<>());
 
         addToDataModel("rec", new TestRecord(1, "S"));
-        addToDataModel("nrc", new TestNonRecord());
+        addToDataModel("nrc", new TestDefault());
     }
 
     private void assertRecIsBothPropertyAndMethod() throws IOException, TemplateException {
@@ -310,7 +310,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
         }
     }
 
-    public static class TestNonRecord implements TestInterface {
+    public static class TestDefault implements TestInterface {
         public int x() {
             return 1;
         }

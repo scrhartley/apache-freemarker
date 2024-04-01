@@ -92,7 +92,7 @@ public interface MethodAppearanceFineTuner {
      *     {@link MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)} {@code true},
      *     both {@code user.name}, and {@code user.name()} will do the same.
      *     The default of this is influenced by
-     *     {@link BeansWrapperConfiguration#setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)},
+     *     {@link BeansWrapperConfiguration#setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)},
      *     {@link BeansWrapperConfiguration#setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
      *   <li>Prevent the method to hide a JavaBeans property (fake or real) of
      *     the same name by calling

@@ -20,10 +20,7 @@
 <book conformance="docgen" version="5.0" xml:lang="en"
       xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
-      xmlns:ns5="http://www.w3.org/1999/xhtml"
-      xmlns:ns4="http://www.w3.org/2000/svg"
-      xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-      xmlns:ns="http://docbook.org/ns/docbook">
+>
   <info>
     <title>Apache FreeMarker Manual</title>
 
@@ -30304,7 +30301,7 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                   <literal>DefaultObjectWrapper</literal>:
                   <literal>recordZeroArgumentNonVoidMethodPolicy</literal>,
                   and
-                  <literal>nonRecordZeroArgumentNonVoidMethodPolicy</literal>.
+                  <literal>defaultZeroArgumentNonVoidMethodPolicy</literal>.
                   Each has enum type
                   <literal>freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy</literal>,
                   that can be <literal>METHOD_ONLY</literal>,
@@ -30315,7 +30312,7 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                   <itemizedlist>
                     <listitem>
                       <para>Note that with
-                      <literal>nonRecordZeroArgumentNonVoidMethodPolicy</literal>
+                      <literal>defaultZeroArgumentNonVoidMethodPolicy</literal>
                       you can set similar behavior to non-records. That is,
                       you can call 0 argument non-void methods without
                       <literal>()</literal>, if you want. It's only meant to

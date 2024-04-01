@@ -28,7 +28,7 @@ import freemarker.template.DefaultObjectWrapper;
  * typically look like {@code getSomething()}, or {@code isSomething()}). It's only applicable to methods like
  * {@code something()}, including the component read methods of Java records.
  *
- * @see BeansWrapperConfiguration#setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)
+ * @see BeansWrapperConfiguration#setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)
  * @see BeansWrapperConfiguration#setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)
  * @see BeansWrapper.MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)
  *

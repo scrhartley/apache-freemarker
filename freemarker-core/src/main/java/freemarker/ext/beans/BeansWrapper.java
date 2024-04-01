@@ -661,12 +661,12 @@ public class BeansWrapper implements RichObjectWrapper, WriteProtectable {
      *
      * @since 2.3.33
      */
-    public void setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy nonRecordZeroArgumentNonVoidMethodPolicy) {
+    public void setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy) {
         checkModifiable();
 
-        if (classIntrospector.getNonRecordZeroArgumentNonVoidMethodPolicy() != nonRecordZeroArgumentNonVoidMethodPolicy) {
+        if (classIntrospector.getDefaultZeroArgumentNonVoidMethodPolicy() != defaultZeroArgumentNonVoidMethodPolicy) {
             ClassIntrospectorBuilder builder = classIntrospector.createBuilder();
-            builder.setNonRecordZeroArgumentNonVoidMethodPolicy(nonRecordZeroArgumentNonVoidMethodPolicy);
+            builder.setDefaultZeroArgumentNonVoidMethodPolicy(defaultZeroArgumentNonVoidMethodPolicy);
             replaceClassIntrospector(builder);
         }
     }
@@ -710,12 +710,12 @@ public class BeansWrapper implements RichObjectWrapper, WriteProtectable {
     }
 
     /**
-     * See {@link #setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
+     * See {@link #setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
      *
      * @since 2.3.33
      */
-    public ZeroArgumentNonVoidMethodPolicy getNonRecordZeroArgumentNonVoidMethodPolicy() {
-        return classIntrospector.getNonRecordZeroArgumentNonVoidMethodPolicy();
+    public ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
+        return classIntrospector.getDefaultZeroArgumentNonVoidMethodPolicy();
     }
 
     /**

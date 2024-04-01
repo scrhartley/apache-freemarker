@@ -254,19 +254,19 @@ public abstract class BeansWrapperConfiguration implements Cloneable {
     /**
      * @since 2.3.33
      */
-    public ZeroArgumentNonVoidMethodPolicy getNonRecordZeroArgumentNonVoidMethodPolicy() {
-        return classIntrospectorBuilder.getNonRecordZeroArgumentNonVoidMethodPolicy();
+    public ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
+        return classIntrospectorBuilder.getDefaultZeroArgumentNonVoidMethodPolicy();
     }
 
     /**
-     * See {@link BeansWrapper#setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
+     * See {@link BeansWrapper#setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
      *
      * <p>Note that methods in this class are inherited by {@link DefaultObjectWrapperBuilder}, which is what you normally use.
      *
      * @since 2.3.33
      */
-    public void setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy nonRecordZeroArgumentNonVoidMethodPolicy) {
-        classIntrospectorBuilder.setNonRecordZeroArgumentNonVoidMethodPolicy(nonRecordZeroArgumentNonVoidMethodPolicy);
+    public void setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy) {
+        classIntrospectorBuilder.setDefaultZeroArgumentNonVoidMethodPolicy(defaultZeroArgumentNonVoidMethodPolicy);
     }
 
     /**

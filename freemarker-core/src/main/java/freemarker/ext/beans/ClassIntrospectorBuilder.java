@@ -47,7 +47,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
     private boolean exposeFields;
     private MemberAccessPolicy memberAccessPolicy;
     private boolean treatDefaultMethodsAsBeanMembers;
-    private ZeroArgumentNonVoidMethodPolicy nonRecordZeroArgumentNonVoidMethodPolicy;
+    private ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy;
     private ZeroArgumentNonVoidMethodPolicy recordZeroArgumentNonVoidMethodPolicy;
     private MethodAppearanceFineTuner methodAppearanceFineTuner;
     private MethodSorter methodSorter;
@@ -63,7 +63,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
         exposeFields = ci.exposeFields;
         memberAccessPolicy = ci.memberAccessPolicy;
         treatDefaultMethodsAsBeanMembers = ci.treatDefaultMethodsAsBeanMembers;
-        nonRecordZeroArgumentNonVoidMethodPolicy = ci.nonRecordZeroArgumentNonVoidMethodPolicy;
+        defaultZeroArgumentNonVoidMethodPolicy = ci.defaultZeroArgumentNonVoidMethodPolicy;
         recordZeroArgumentNonVoidMethodPolicy = ci.recordZeroArgumentNonVoidMethodPolicy;
         methodAppearanceFineTuner = ci.methodAppearanceFineTuner;
         methodSorter = ci.methodSorter;
@@ -75,7 +75,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
         // to some version changes that affects BeansWrapper, but not the other way around.
         this.incompatibleImprovements = normalizeIncompatibleImprovementsVersion(incompatibleImprovements);
         treatDefaultMethodsAsBeanMembers = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_26;
-        nonRecordZeroArgumentNonVoidMethodPolicy = ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
+        defaultZeroArgumentNonVoidMethodPolicy = ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
         recordZeroArgumentNonVoidMethodPolicy = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_33 && _JavaVersions.JAVA_16 != null
                 ? ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD : ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
         memberAccessPolicy = DefaultMemberAccessPolicy.getInstance(this.incompatibleImprovements);
@@ -106,7 +106,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
         result = prime * result + incompatibleImprovements.hashCode();
         result = prime * result + (exposeFields ? 1231 : 1237);
         result = prime * result + (treatDefaultMethodsAsBeanMembers ? 1231 : 1237);
-        result = prime * result + nonRecordZeroArgumentNonVoidMethodPolicy.hashCode();
+        result = prime * result + defaultZeroArgumentNonVoidMethodPolicy.hashCode();
         result = prime * result + recordZeroArgumentNonVoidMethodPolicy.hashCode();
         result = prime * result + exposureLevel;
         result = prime * result + memberAccessPolicy.hashCode();
@@ -125,7 +125,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
         if (!incompatibleImprovements.equals(other.incompatibleImprovements)) return false;
         if (exposeFields != other.exposeFields) return false;
         if (treatDefaultMethodsAsBeanMembers != other.treatDefaultMethodsAsBeanMembers) return false;
-        if (nonRecordZeroArgumentNonVoidMethodPolicy != other.nonRecordZeroArgumentNonVoidMethodPolicy) return false;
+        if (defaultZeroArgumentNonVoidMethodPolicy != other.defaultZeroArgumentNonVoidMethodPolicy) return false;
         if (recordZeroArgumentNonVoidMethodPolicy != other.recordZeroArgumentNonVoidMethodPolicy) return false;
         if (exposureLevel != other.exposureLevel) return false;
         if (!memberAccessPolicy.equals(other.memberAccessPolicy)) return false;
@@ -168,16 +168,16 @@ final class ClassIntrospectorBuilder implements Cloneable {
     /**
      * @since 2.3.33
      */
-    public ZeroArgumentNonVoidMethodPolicy getNonRecordZeroArgumentNonVoidMethodPolicy() {
-        return nonRecordZeroArgumentNonVoidMethodPolicy;
+    public ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
+        return defaultZeroArgumentNonVoidMethodPolicy;
     }
 
     /**
      * @since 2.3.33
      */
-    public void setNonRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy nonRecordZeroArgumentNonVoidMethodPolicy) {
-        NullArgumentException.check(nonRecordZeroArgumentNonVoidMethodPolicy);
-        this.nonRecordZeroArgumentNonVoidMethodPolicy = nonRecordZeroArgumentNonVoidMethodPolicy;
+    public void setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy) {
+        NullArgumentException.check(defaultZeroArgumentNonVoidMethodPolicy);
+        this.defaultZeroArgumentNonVoidMethodPolicy = defaultZeroArgumentNonVoidMethodPolicy;
     }
 
     /**

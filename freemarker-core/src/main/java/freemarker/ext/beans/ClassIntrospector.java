@@ -153,7 +153,7 @@ class ClassIntrospector {
     final MethodAppearanceFineTuner methodAppearanceFineTuner;
     final MethodSorter methodSorter;
     final boolean treatDefaultMethodsAsBeanMembers;
-    final ZeroArgumentNonVoidMethodPolicy nonRecordZeroArgumentNonVoidMethodPolicy;
+    final ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy;
     final ZeroArgumentNonVoidMethodPolicy recordZeroArgumentNonVoidMethodPolicy;
     final private boolean recordAware;
     final Version incompatibleImprovements;
@@ -197,12 +197,12 @@ class ClassIntrospector {
         this.methodAppearanceFineTuner = builder.getMethodAppearanceFineTuner();
         this.methodSorter = builder.getMethodSorter();
         this.treatDefaultMethodsAsBeanMembers = builder.getTreatDefaultMethodsAsBeanMembers();
-        this.nonRecordZeroArgumentNonVoidMethodPolicy = builder.getNonRecordZeroArgumentNonVoidMethodPolicy();
+        this.defaultZeroArgumentNonVoidMethodPolicy = builder.getDefaultZeroArgumentNonVoidMethodPolicy();
         this.recordZeroArgumentNonVoidMethodPolicy = builder.getRecordZeroArgumentNonVoidMethodPolicy();
-        this.recordAware = nonRecordZeroArgumentNonVoidMethodPolicy != recordZeroArgumentNonVoidMethodPolicy;
+        this.recordAware = defaultZeroArgumentNonVoidMethodPolicy != recordZeroArgumentNonVoidMethodPolicy;
         if (recordAware && _JavaVersions.JAVA_16 == null) {
             throw new IllegalArgumentException(
-                    "nonRecordZeroArgumentNonVoidMethodPolicy != recordZeroArgumentNonVoidMethodPolicy, " +
+                    "defaultZeroArgumentNonVoidMethodPolicy != recordZeroArgumentNonVoidMethodPolicy, " +
                     "but Java 16 support is not available.");
         }
         this.incompatibleImprovements = builder.getIncompatibleImprovements();
@@ -346,7 +346,7 @@ class ClassIntrospector {
         boolean treatClassAsRecord = recordAware && _JavaVersions.JAVA_16.isRecord(clazz);
         ZeroArgumentNonVoidMethodPolicy zeroArgumentNonVoidMethodPolicy = treatClassAsRecord
                 ? recordZeroArgumentNonVoidMethodPolicy
-                : nonRecordZeroArgumentNonVoidMethodPolicy;
+                : defaultZeroArgumentNonVoidMethodPolicy;
 
         // For real Java Beans properties only, used to exclude them from creating fake properties based on ZeroArgumentNonVoidMethod.
         Set<String> beanPropertyReadMethodNameCollector = zeroArgumentNonVoidMethodPolicy != ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY
@@ -1131,8 +1131,8 @@ class ClassIntrospector {
         return treatDefaultMethodsAsBeanMembers;
     }
 
-    ZeroArgumentNonVoidMethodPolicy getNonRecordZeroArgumentNonVoidMethodPolicy() {
-        return nonRecordZeroArgumentNonVoidMethodPolicy;
+    ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
+        return defaultZeroArgumentNonVoidMethodPolicy;
     }
 
     ZeroArgumentNonVoidMethodPolicy getRecordZeroArgumentNonVoidMethodPolicy() {
