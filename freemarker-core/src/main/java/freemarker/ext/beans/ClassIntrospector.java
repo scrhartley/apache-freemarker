@@ -394,7 +394,7 @@ class ClassIntrospector {
                     PropertyDescriptor propDesc = decision.getExposeAsProperty();
                     if (propDesc != null &&
                             (decision.getReplaceExistingProperty()
-                                    || !(introspData.get(propDesc.getName()) instanceof FastPropertyDescriptor))) {
+                                    || isExistingIntropsDataNotPropertyOrNewAddsMethodSupport(introspData, propDesc.getName(), decision))) {
                         boolean methodInsteadOfPropertyValueBeforeCall = decision.isMethodInsteadOfPropertyValueBeforeCall();
                         addPropertyDescriptorToClassIntrospectionData(
                                 introspData, propDesc, methodInsteadOfPropertyValueBeforeCall,
@@ -439,6 +439,17 @@ class ClassIntrospector {
                 }
             } // for each in mds
         } // end if (exposureLevel < EXPOSE_PROPERTIES_ONLY)
+    }
+
+    private static boolean isExistingIntropsDataNotPropertyOrNewAddsMethodSupport(
+            Map<Object, Object> introspData, String introspDataKey, MethodAppearanceDecision decision) {
+        Object prevIntrospDataValue = introspData.get(introspDataKey);
+        if (prevIntrospDataValue instanceof FastPropertyDescriptor) {
+            return decision.isMethodInsteadOfPropertyValueBeforeCall()
+                    && !((FastPropertyDescriptor) prevIntrospDataValue).isMethodInsteadOfPropertyValueBeforeCall();
+        } else {
+            return true;
+        }
     }
 
     private static ZeroArgumentNonVoidMethodPolicy getAppliedZeroArgumentNonVoidMethodPolicy(Method method, Set<String> beanPropertyReadMethodNameCollector, ZeroArgumentNonVoidMethodPolicy zeroArgumentNonVoidMethodPolicy) {
