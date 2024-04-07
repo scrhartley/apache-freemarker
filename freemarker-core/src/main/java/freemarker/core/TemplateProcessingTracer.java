@@ -48,7 +48,7 @@ public interface TemplateProcessingTracer {
      * 
      * @since 2.3.23
      */
-    void exitElement(Environment env);
+    void exitElement(Environment env, TracedElement tracedElement);
 
     /**
      * Information about the template element that we enter of exit.

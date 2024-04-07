@@ -47,7 +47,7 @@ class ListElseContainer extends TemplateElement {
             try {
                 hadItems = listPart.acceptWithResult(env);
             } finally {
-                templateProcessingTracer.exitElement(env);
+                templateProcessingTracer.exitElement(env, listPart);
             }
         }
 

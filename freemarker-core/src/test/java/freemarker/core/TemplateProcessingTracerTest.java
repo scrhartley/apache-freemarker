@@ -238,7 +238,7 @@ public class TemplateProcessingTracerTest {
             }
         }
 
-        public void exitElement(Environment env) {
+        public void exitElement(Environment env, TracedElement tracedElement) {
             indentation = indentation.isEmpty() ? null : indentation.substring(0, indentation.length() - 1);
         }
     }
