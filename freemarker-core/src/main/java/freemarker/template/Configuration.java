@@ -1636,36 +1636,81 @@ public class Configuration extends Configurable implements Cloneable, ParserConf
      * 
      * @param servletContext the {@code javax.servlet.ServletContext} object. (The declared type is {@link Object}
      *        to prevent class loading error when using FreeMarker in an environment where
-     *        there's no servlet classes available.)
-     * @param path the path relative to the ServletContext.
+     *        there's no servlet classes available.) Can't be {@code null}.
+     * @param path the path relative to the ServletContext; maybe {@code null}.
      *
      * @see #setTemplateLoader(TemplateLoader)
      */
     public void setServletContextForTemplateLoading(Object servletContext, String path) {
+        NullArgumentException.check("servletContext", servletContext);
+
+        // To not introduce linking-time dependency on servlets, we load all related classes on runtime.
+        Class<?> servletContextClass = null;
+        Boolean jakartaMode = null;
+
+        Exception jakartaServletClassLoadingException = null;
         try {
-            // Don't introduce linking-time dependency on servlets
-            final Class webappTemplateLoaderClass = ClassUtil.forName("freemarker.cache.WebappTemplateLoader");
-            
-            // Don't introduce linking-time dependency on servlets
-            final Class servletContextClass = ClassUtil.forName("javax.servlet.ServletContext");
-            
-            final Class[] constructorParamTypes;
-            final Object[] constructorParams;
-            if (path == null) {
-                constructorParamTypes = new Class[] { servletContextClass };
-                constructorParams = new Object[] { servletContext };
-            } else {
-                constructorParamTypes = new Class[] { servletContextClass, String.class };
-                constructorParams = new Object[] { servletContext, path };
+            servletContextClass = ClassUtil.forName("jakarta.servlet.ServletContext");
+            if (servletContextClass.isInstance(servletContext)) {
+                jakartaMode = true;
             }
-            
-            setTemplateLoader( (TemplateLoader)
-                    webappTemplateLoaderClass
-                            .getConstructor(constructorParamTypes)
-                                    .newInstance(constructorParams));
         } catch (Exception e) {
-            throw new BugException(e);
+            jakartaServletClassLoadingException = e;
         }
+
+        Exception javaxServletClassLoadingException = null;
+        if (jakartaMode == null) {
+            try {
+                servletContextClass = ClassUtil.forName("javax.servlet.ServletContext");
+                if (servletContextClass.isInstance(servletContext)) {
+                    jakartaMode = false;
+                }
+            } catch (Exception e) {
+                javaxServletClassLoadingException = e;
+            }
+        }
+
+        if (servletContextClass == null) {
+                throw new UnsupportedOperationException("Failed to get ServletContext class; probably Servlet API-s "
+                        + "are not supported in this environment, but check the exceptions:"
+                        + "\n- When attempted use Jakarta Servlet support: " + jakartaServletClassLoadingException
+                        + "\n- When attempted use javax Servlet support: " + javaxServletClassLoadingException);
+        }
+        if (jakartaMode == null) {
+            throw new IllegalArgumentException("servletContext must implement ServletContext, but "
+                    + servletContext.getClass().getName() + " does not.");
+        }
+
+        Class<?> webappTemplateLoaderClass;
+        try {
+            webappTemplateLoaderClass = ClassUtil.forName(
+                    jakartaMode
+                            ? "freemarker.ext.jakarta.servlet.WebappTemplateLoader"
+                            : "freemarker.cache.WebappTemplateLoader");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Failed to get WebappTemplateLoader class", e);
+        }
+
+        final Class<?>[] constructorParamTypes;
+        final Object[] constructorParams;
+        if (path == null) {
+            constructorParamTypes = new Class<?>[] { servletContextClass };
+            constructorParams = new Object[] { servletContext };
+        } else {
+            constructorParamTypes = new Class[] { servletContextClass, String.class };
+            constructorParams = new Object[] { servletContext, path };
+        }
+
+        TemplateLoader templateLoader;
+        try {
+            templateLoader = (TemplateLoader) webappTemplateLoaderClass
+                            .getConstructor(constructorParamTypes)
+                            .newInstance(constructorParams);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to instantiate " + webappTemplateLoaderClass.getName(), e);
+        }
+
+        setTemplateLoader(templateLoader);
     }
 
     /**
