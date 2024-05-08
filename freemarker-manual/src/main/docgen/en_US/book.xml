@@ -30114,13 +30114,12 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
       <section xml:id="versions_2_3_33">
         <title>2.3.33</title>
 
-        <para>Release date: [TODO]</para>
+        <para>Release date: 2024-05-18 + release process</para>
 
         <para>Please note that with this version the minimum required Java
-        version was increased from Java 7 to Java 8. Also for the few who
-        relly on Servlet and/or JSP support, the minimum is now increased to
-        Servlet 3.0, and JSP 2.2 (which are still very old versions from
-        2011).</para>
+        version was increased from Java 7 to Java 8. Also for the few who rely
+        on Servlet and/or JSP support, the minimum is now increased to Servlet
+        3.0, and JSP 2.2 (which are still very old versions from 2011).</para>
 
         <section>
           <title>Changes on the FTL side</title>
@@ -30269,8 +30268,9 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
               <literal>ObjectWrapper</literal>, then set its
               <literal>incompatible_improvements</literal>, or just its
               <literal>recordZeroArgumentNonVoidMethodPolicy</literal>
-              property to <literal>BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>). If in
-              a Java record you have something like <literal>int
+              property to
+              <literal>BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>).
+              If in a Java record you have something like <literal>int
               price()</literal>, earlier you could only read the value in
               templates as <literal>obj.price()</literal>. With this
               improvement <literal>obj.price</literal> will do the same (and
@@ -30305,7 +30305,8 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                   Each has enum type
                   <literal>freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy</literal>,
                   that can be <literal>METHOD_ONLY</literal>,
-                  <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>, or
+                  <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>,
+                  or
                   <literal>BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>.
                   Therefore:</para>
 
@@ -30324,7 +30325,9 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                       <para>For records, you can enforce proper style with
                       setting
                       <literal>recordZeroArgumentNonVoidMethodPolicy</literal>
-                      to <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>. The default with
+                      to
+                      <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>.
+                      The default with
                       <literal>incompatible_improvements</literal> 2.3.33 is
                       more lenient, as there using <literal>()</literal> is
                       allowed (for backward compatibility, and because people
