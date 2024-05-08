@@ -30269,7 +30269,7 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
               <literal>ObjectWrapper</literal>, then set its
               <literal>incompatible_improvements</literal>, or just its
               <literal>recordZeroArgumentNonVoidMethodPolicy</literal>
-              property to <literal>BOTH_PROPERTY_AND_METHOD</literal>). If in
+              property to <literal>BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>). If in
               a Java record you have something like <literal>int
               price()</literal>, earlier you could only read the value in
               templates as <literal>obj.price()</literal>. With this
@@ -30305,8 +30305,8 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                   Each has enum type
                   <literal>freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy</literal>,
                   that can be <literal>METHOD_ONLY</literal>,
-                  <literal>PROPERTY_ONLY</literal>, or
-                  <literal>BOTH_PROPERTY_AND_METHOD</literal>.
+                  <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>, or
+                  <literal>BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>.
                   Therefore:</para>
 
                   <itemizedlist>
@@ -30324,7 +30324,7 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                       <para>For records, you can enforce proper style with
                       setting
                       <literal>recordZeroArgumentNonVoidMethodPolicy</literal>
-                      to <literal>PROPERTY_ONLY</literal>. The default with
+                      to <literal>PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>. The default with
                       <literal>incompatible_improvements</literal> 2.3.33 is
                       more lenient, as there using <literal>()</literal> is
                       allowed (for backward compatibility, and because people
@@ -30345,7 +30345,7 @@ TemplateModel x = env.getVariable("x");  // get variable x</programlisting>
                   instead of
                   <literal>TemplateHashModel.get("price")</literal>. This is
                   needed for
-                  <literal>ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD</literal>
+                  <literal>ZeroArgumentNonVoidMethodPolicy.BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD</literal>
                   to work.</para>
                 </listitem>
 

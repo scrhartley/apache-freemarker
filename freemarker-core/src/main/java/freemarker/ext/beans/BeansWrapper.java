@@ -266,7 +266,8 @@ public class BeansWrapper implements RichObjectWrapper, WriteProtectable {
      *     <li>
      *       <p>2.3.33 (or higher):
      *       The default of {@link BeansWrapper#setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}
-     *       has changed to {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD}, from
+     *       has changed to
+     *       {@link ZeroArgumentNonVoidMethodPolicy#BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD}, from
      *       {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}. This means that Java record public methods with
      *       0-arguments and non-void return type are now exposed both as properties, and as methods, while earlier they
      *       were only exposed as methods. That is, if in a record you have {@code public String name()}, now in
@@ -670,8 +671,9 @@ public class BeansWrapper implements RichObjectWrapper, WriteProtectable {
     /**
      * Sets the {@link ZeroArgumentNonVoidMethodPolicy} for classes that are Java records; if the
      * {@code BeansWrapper#BeansWrapper(Version) incompatibleImprovements} of the object wrapper is at least 2.3.33,
-     * then this defaults to {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD}, otherwise this defaults
-     * to {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}.
+     * then this defaults to
+     * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD},
+     * otherwise this defaults to {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}.
      *
      * <p>Note that methods in this class are inherited by {@link DefaultObjectWrapper}, which is what you normally use.
      *
@@ -1945,12 +1947,12 @@ public class BeansWrapper implements RichObjectWrapper, WriteProtectable {
                     throw new BugException("Failed to create PropertyDescriptor for " + m, e);
                 }
                 methodInsteadOfPropertyValueBeforeCall = appliedZeroArgumentNonVoidMethodPolicy ==
-                        ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD;
+                        ZeroArgumentNonVoidMethodPolicy.BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD;
             } else {
                 exposeAsProperty = null;
                 methodInsteadOfPropertyValueBeforeCall = false;
             }
-            exposeMethodAs = appliedZeroArgumentNonVoidMethodPolicy != ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY
+            exposeMethodAs = appliedZeroArgumentNonVoidMethodPolicy != ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD
                     ? m.getName() : null;
             methodShadowsProperty = true;
             replaceExistingProperty = false;

@@ -75,7 +75,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_32);
                         beansWrapper.setRecordZeroArgumentNonVoidMethodPolicy(
-                                ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD);
+                                ZeroArgumentNonVoidMethodPolicy.BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -90,7 +90,8 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
             setupDataModel(
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_32);
-                        beansWrapper.setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY);
+                        beansWrapper.setRecordZeroArgumentNonVoidMethodPolicy(
+                                ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -105,7 +106,8 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
             setupDataModel(
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_33);
-                        beansWrapper.setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY);
+                        beansWrapper.setRecordZeroArgumentNonVoidMethodPolicy(
+                                ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -120,7 +122,8 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
             setupDataModel(
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_32);
-                        beansWrapper.setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY);
+                        beansWrapper.setDefaultZeroArgumentNonVoidMethodPolicy(
+                                ZeroArgumentNonVoidMethodPolicy.PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -136,7 +139,7 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
                     () -> {
                         DefaultObjectWrapper beansWrapper = new DefaultObjectWrapper(VERSION_2_3_33);
                         beansWrapper.setDefaultZeroArgumentNonVoidMethodPolicy(
-                                ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD);
+                                ZeroArgumentNonVoidMethodPolicy.BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD);
                         return beansWrapper;
                     },
                     cacheTopLevelVars);
@@ -149,7 +152,10 @@ public class TestZeroArgumentNonVoidMethodPolicy extends TemplateTest {
     public void testSettings() throws TemplateException, IOException {
             getConfiguration().setSetting(
                     "objectWrapper",
-                    "DefaultObjectWrapper(2.3.33, defaultZeroArgumentNonVoidMethodPolicy=freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD)");
+                    "DefaultObjectWrapper(2.3.33, "
+                            + "defaultZeroArgumentNonVoidMethodPolicy="
+                            + "freemarker.ext.beans.ZeroArgumentNonVoidMethodPolicy"
+                            + ".BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD)");
             setupDataModel(() -> getConfiguration().getObjectWrapper(), false);
             assertRecIsBothPropertyAndMethod();
             assertNrcIsBothPropertyAndMethod();

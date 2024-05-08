@@ -77,7 +77,7 @@ final class ClassIntrospectorBuilder implements Cloneable {
         treatDefaultMethodsAsBeanMembers = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_26;
         defaultZeroArgumentNonVoidMethodPolicy = ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
         recordZeroArgumentNonVoidMethodPolicy = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_33 && _JavaVersions.JAVA_16 != null
-                ? ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD
+                ? ZeroArgumentNonVoidMethodPolicy.BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD
                 : defaultZeroArgumentNonVoidMethodPolicy;
         memberAccessPolicy = DefaultMemberAccessPolicy.getInstance(this.incompatibleImprovements);
     }
@@ -198,7 +198,8 @@ final class ClassIntrospectorBuilder implements Cloneable {
 
     /**
      * Sets the {@link ZeroArgumentNonVoidMethodPolicy} used for records.
-     * The default value is {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD} if
+     * The default value is
+     * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD} if
      * {@link #getIncompatibleImprovements()} is at least 2.3.33, and we are on Java 16 or later, otherwise
      * it's {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}.
      *

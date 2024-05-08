@@ -47,7 +47,8 @@ import freemarker.template.utility.NullArgumentException;
  * operator will call {@link #getBeforeMethodCall(String) getBeforeMethodCall("someComponent")}, rather than
  * {@link #get(String) get("someComponent")}. This is needed to implement subtle features like
  * {@link BeansWrapper.MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)},
- * which is needed to implement {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD}.
+ * which is needed to implement
+ * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD}.
  *
  * <p>While technically we could do the same for method calls with more the 0 arguments, as of 2.3.33 at least, we
  * don't want to generalize this to that case. This is a workaround we added to address the issue with accessing

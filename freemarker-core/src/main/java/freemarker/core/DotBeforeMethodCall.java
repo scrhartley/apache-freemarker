@@ -30,7 +30,7 @@ import freemarker.template.TemplateModel;
  * Like {@link Dot}, but when used before method call (but as of 2.3.33, before 0-argument calls only), as in
  * {@code obj.key()}. The reason it's only used before 0-argument calls (as of 2.3.33 at least) is that it adds some
  * overhead, and this {@link Dot} subclass was added to implement
- * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD}
+ * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD}
  * (via {@link BeansWrapper.MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)}). We don't
  * necessarily want to go beyond that hack, as we don't have separate method namespace in the template language.
  *

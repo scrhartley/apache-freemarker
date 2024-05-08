@@ -65,7 +65,7 @@ public enum ZeroArgumentNonVoidMethodPolicy {
      * before FreeMarker was aware of records (and hence that those methods are like property read methods), the
      * only way that worked was {@code obj.something()}, so to be more backward compatible, we have to support both.
      */
-    BOTH_PROPERTY_AND_METHOD,
+    BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD,
 
     /**
      * Only {@code obj.m()} gives back the value in a template, {@code obj.m} in a template just gives the method itself.
@@ -75,7 +75,7 @@ public enum ZeroArgumentNonVoidMethodPolicy {
     /**
      * {@code obj.m} in a template gives back the value, and you can't get the method itself. But, it's not applicable
      * for Java Bean property read methods, which will remain normals methods, just like with
-     * {@link #BOTH_PROPERTY_AND_METHOD}.
+     * {@link #BOTH_METHOD_AND_PROPERTY_UNLESS_BEAN_PROPERTY_READ_METHOD}.
      */
-    PROPERTY_ONLY
+    PROPERTY_ONLY_UNLESS_BEAN_PROPERTY_READ_METHOD
 }
