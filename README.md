@@ -1,5 +1,5 @@
-Apache FreeMarker {version}
-===========================
+Apache FreeMarker™ {version}
+============================
 
 [![Build status](https://github.com/apache/freemarker/actions/workflows/ci.yml/badge.svg)](https://github.com/apache/freemarker/actions/workflows/ci.yml)
 
@@ -19,11 +19,11 @@ For contributions that are judged to be non-trivial, you will be asked
 to actually signing a Contributor License Agreement.
 
 
-What is Apache FreeMarker?
---------------------------
+What is Apache FreeMarker™?
+---------------------------
 
-FreeMarker is a "template engine"; a generic tool to generate text
-output (anything from HTML to auto generated source code) based on
+Apache FreeMarker™ is a "template engine"; a generic tool to generate
+text output (anything from HTML to auto generated source code) based on
 templates. It's a Java package, a class library for Java programmers.
 It's not an application for end-users in itself, but something that
 programmers can embed into their products. FreeMarker is designed to
@@ -37,7 +37,7 @@ Licensing
 
 FreeMarker is licensed under the Apache License, Version 2.0.
 
-See the LICENSE file for more details!
+See the `LICENSE` file for more details!
 
 
 Documentation
@@ -68,9 +68,9 @@ If you are using Maven, just add this dependency:
 ```
 
 Otherwise, simply copy `freemarker.jar` to a location where your Java
-application's ClassLoader will find it. For example, if you are using
+application's `ClassLoader` will find it. For example, if you are using
 FreeMarker in a web application, you probably want to put
-freemarker.jar into the WEB-INF/lib directory of your web application.
+`freemarker.jar` into the `WEB-INF/lib` directory of your web application.
 
 FreeMarker has no required dependencies. It has several optional
 dependencies, but usually you don't have to deal with them, because if
@@ -79,13 +79,13 @@ application already uses the related library.
 
 Attention: If you upgrade to OpenJDK 9 or later, and you are using
 XPath queries in templates, you will need to add Apache Xalan as a
-dependency, as freemarker.ext.dom can't use the XPath support
+dependency, as `freemarker.ext.dom` can't use the XPath support
 included in OpenJDK anymore. It's not needed on Oracle Java 9,
 or if FreeMarker is configured to use Jaxen for XPath.
 
 The minimum required Java version is currently Java SE 8. (The presence
-of a later version may be detected on runtime and utilized by
-FreeMarker.)
+of a later version is detected on runtime and utilized by FreeMarker
+automatically.)
 
 
 Change log
@@ -95,7 +95,7 @@ Online (for stable releases only):
 https://freemarker.apache.org/docs/app_versions.html
 
 Offline:
-In the binary release, open documentation/index.html, and you will find the
+In the binary release, open `documentation/index.html`, and you will find the
 link.
 
 
@@ -106,8 +106,10 @@ If you haven't yet, download the source release, or checkout FreeMarker from
 the source code repository. See repository locations here:
 https://freemarker.apache.org/sourcecode.html
 
-You need JDK 8, JDK 16 and JDK 17 (only for some tests) to be installed
+You need JDK 8, JDK 16, and JDK 17 (only for some tests) to be installed
 (and [visible to Gradle](https://docs.gradle.org/current/userguide/toolchains.html)).
+That's because different parts of the source code target different Java versions,
+and Gradle requires the exact JDK version (not higher) for each.
 
 Be sure that your default Java version (which Gradle should use automatically) is at
 least 16!
@@ -118,40 +120,68 @@ have to add it yourself! You can download it
 [from GitHub source code page](https://github.com/apache/freemarker/tree/2.3-gae/gradle/wrapper)!
 (Or, use your own Gradle installation instead of `gradlew`.)
 
-To build `freemarker.jar`, just issue `./gradlew jar` in the project root directory,
-and it should download all dependencies automatically and build `freemarker.jar`.
+To build `freemarker.jar`, just issue `./gradlew jar` (`./gradlew.bat jar` on Windows) in the
+project root directory, and it should download all dependencies automatically, and build
+`freemarker.jar`.
 
 To run all JUnit tests and some other checks, issue `./gradlew check`. (Avoid the
 `test` task, as that will only run the tests of the `core` source set.)
 
 To generate documentation, issue `./gradlew javadoc` and `./gradlew manualOffline`.
 
+To build the distribution artifacts (the `tgz`-s that people can download), run `./gradlew build`. However,
+for a stable (non-`SNAPSHOT`) version number, you must set up signing, or disable that verification;
+see `gradle.properties` in this project for those!
+
+Reproducible builds: If the resulting `freemarker.jar` is not identical with the official jar, see the build environment
+in the `.buildinfo` file packed into the official source distribution, and also into the Maven "sources" artifact! At
+least with identical Java versions, the resulting `freemarker.jar` meant to match exactly.
+
+
+Maven-related build tasks
+.........................
+
 To see how the project would be deployed to Maven Central, issue
 `./gradlew publishAllPublicationsToLocalRepository`,
 and check the `build/local-deployment` directory.
 
-To build the distribution artifacts (the `tgz`-s that people can download), run `./gradlew build`.However,
+To publish to the Apache Maven Repository (from where you can also promote releases to the Maven Central Repository)
+issue `.\gradlew publish`. Note that for this the following Gradle properties must be properly set
+(in `gradle.properties`, or pass them via `-P<name>=<value>` arguments):
+`freemarker.signMethod`, `freemarker.deploy.apache.user`, `freemarker.deploy.apache.password`.
 
-For a stable (non-SNAPSHOT) version number, you will need to set up signing, or disable that verification;
-see `gradle.properties` in this project for those!  
-
-See `gradle.properties` for some Gradle properties that you may what to set,
-especially if you are building a release.
-
-Reproducible builds: If the resulting `freemarker.jar` is not identical with the official jar, see the build environment
-in the `.buildinfo` file packed into the official source distribution, and also into the Maven "sources" artifact!  
 
 
 IDE setup
 ---------
 
+### IntelliJ IDEA
+
+Originally done on IntelliJ IDEA Community 2023.3.2:
+
+- "File" -> "Open": Select the "settings.gradle.kts" within the freemarker root directory.
+- If the project fails to load (or build), then adjust the following configuration
+  in "File" -> "Settings" -> "Build, Execution, Deployment" -> "Build Tools" -> "Gradle":
+  - Gradle JVM: JDK 16 (or higher)
+  - Build and run using: "Gradle"
+  - Run tests using: "Gradle"
+
+- "File" -> "Settings"
+  - Under "Editor" / "Code style", import and use
+    freemarker/src/ide-settings/IntelliJ-IDEA/Java-code-style-FreeMarker.xml
+  - Under "Editor" / "Inspections", import and use
+    freemarker/src/ide-settings/IntelliJ-IDEA/Editor-Inspections-FreeMarker.xml
+  - Copy the copyright header comment from some of the java files, then
+    under "Editor" / "Copyright" / "Copyright Profiles" click "+", enter "ASL2" as name,
+    then paste the copyright header. Delete the `/*` and ` */` lines, and the ` *`
+    prefixes (to select columns of text, hold Alt while selecting with the mouse.) Then
+    go back to "Copyright" in the tree, and set "Default project copyright" to "ASL2".
+
 ### Eclipse
 
-Below you find the step-by-step setup for Eclipse (originally done on Mars.1):
+This section wasn't updated long ago. But you should import the project as any other
+Gradle project. After that, it's recommended to set these preferences (based on Eclipse Mars):
 
-- Start Eclipse
-- You may prefer to start a new workspace (File -> "Switch workspace"), but
-  it's optional.
 - Window -> Preferences
   - General -> Workspace, set the text file encoding
     to "UTF-8". (Or, you can set the same later on project level instead.)
@@ -186,15 +216,6 @@ Below you find the step-by-step setup for Eclipse (originally done on Mars.1):
 - Project -> Properties -> Java Compiler
   - In Errors/Warnings, check in "Enable project specific settings", then set
     "Forbidden reference (access rules)" from "Error" to "Warning".
-- You will still have errors on these java files (because different java
-  files depend on different versions of the same library, and Eclipse can't
-  handle that). Exclude those java files from the Build Path (in the Package
-  Explorer, right-click on the problematic file -> "Build Path" -> "Exclude"):
-    _Jython20*.java,
-    _Jython22*.java,
-    _FreeMarkerPageContext2.java,
-    FreeMarkerJspFactory2.java,
-  Also, close these files if they are open. Now you shouldn't have any errors.
 - At Project -> Properties -> Java Code Style -> Formatter, check in "Enable
   project specific settings", and then select "FreeMarker" as active profile.
 - At Project -> Properties -> Java Editor -> Save Actions, check "Enable project
@@ -203,7 +224,7 @@ Below you find the step-by-step setup for Eclipse (originally done on Mars.1):
   last should contain "Add missing @Override annotations",
   "Add missing @Override annotations to implementations of interface methods",
   "Add missing @Deprecated annotations", and "Remove unnecessary cast").
-- Right click on the project -> Run As -> JUnit Test
+- Right-click on the project -> Run As -> JUnit Test
   It should run without problems (all green).
 - It's highly recommended to use the Eclipse FindBugs plugin.
   - Install it from Eclipse Marketplace (3.0.1 as of this writing)
@@ -213,25 +234,3 @@ Below you find the step-by-step setup for Eclipse (originally done on Mars.1):
   - Project -> Properties -> FindBugs -> [x] Run Automatically
   - There should 0 errors. But sometimes the plugin fails to take the
     @SuppressFBWarnings annotations into account; then use Project -> Clean. 
-
-### IntelliJ IDEA
-
-Originally done on IntelliJ IDEA Community 2023.3.2:
-
-- "File" -> "Open": Select the "settings.gradle.kts" within the freemarker root directory.
-- If the project fails to load (or build), then adjust the following configuration
-  in "File" -> "Settings" -> "Build, Execution, Deployment" -> "Build Tools" -> "Gradle":
-  - Gradle JVM: JDK 16 (or higher)
-  - Build and run using: "Gradle"
-  - Run tests using: "Gradle"
-
-- "File" -> "Settings"
-  - Under "Editor" / "Code style", import and use
-    freemarker/src/ide-settings/IntelliJ-IDEA/Java-code-style-FreeMarker.xml
-  - Under "Editor" / "Inspections", import and use
-    freemarker/src/ide-settings/IntelliJ-IDEA/Editor-Inspections-FreeMarker.xml
-  - Copy the copyright header comment from some of the java files, then
-    under "Editor" / "Copyright" / "Copyright Profiles" click "+", enter "ASL2" as name,
-    then paste the copyright header. Delete the `/*` and ` */` lines, and the ` *`
-    prefixes (to select columns of text, hold Alt while selecting with the mouse.) Then
-    go back to "Copyright" in the tree, and set "Default project copyright" to "ASL2".
