@@ -27,7 +27,7 @@ import freemarker.template.Template;
  * <p>
  * Use {@link Environment#setTemplateProcessingTracer(TemplateProcessingTracer)} to set a tracer for the current
  * environment.
- * 
+ *
  * @since 2.3.33
  */
 public interface TemplateProcessingTracer {
@@ -36,8 +36,6 @@ public interface TemplateProcessingTracer {
      * Invoked by {@link Environment} whenever it starts processing a new template element. A template element is a
      * directive call, an interpolation (like <code>${...}</code>), a comment block, or static text. Expressions
      * are not template elements.
-     * 
-     * @since 2.3.23
      */
     void enterElement(Environment env, TracedElement tracedElement);
 
@@ -45,13 +43,14 @@ public interface TemplateProcessingTracer {
      * Invoked by {@link Environment} whenever it completes processing a new template element.
      *
      * @see #enterElement(Environment, TracedElement)
-     * 
-     * @since 2.3.23
      */
     void exitElement(Environment env, TracedElement tracedElement);
 
     /**
-     * Information about the template element that we enter of exit.
+     * Information about the template element that we enter of exit; do NOT implement this (outside FreeMarker), as
+     * new methods can be added to this anytime!
+     *
+     * @since 2.3.33
      */
     interface TracedElement {
         /**
