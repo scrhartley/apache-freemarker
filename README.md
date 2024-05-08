@@ -138,8 +138,7 @@ in the `.buildinfo` file packed into the official source distribution, and also 
 least with identical Java versions, the resulting `freemarker.jar` meant to match exactly.
 
 
-Maven-related build tasks
-.........................
+### Maven-related build tasks
 
 To see how the project would be deployed to Maven Central, issue
 `./gradlew publishAllPublicationsToLocalRepository`,
