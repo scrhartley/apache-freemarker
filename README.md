@@ -120,7 +120,7 @@ have to add it yourself! You can download it
 [from GitHub source code page](https://github.com/apache/freemarker/tree/2.3-gae/gradle/wrapper)!
 (Or, use your own Gradle installation instead of `gradlew`.)
 
-To build `freemarker.jar`, just issue `./gradlew jar` (`./gradlew.bat jar` on Windows) in the
+To build `freemarker.jar`, just issue `./gradlew jar` (`gradlew.bat jar` on Windows) in the
 project root directory, and it should download all dependencies automatically, and build
 `freemarker.jar`.
 
