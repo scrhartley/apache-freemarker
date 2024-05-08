@@ -130,8 +130,8 @@ To run all JUnit tests and some other checks, issue `./gradlew check`. (Avoid th
 To generate documentation, issue `./gradlew javadoc` and `./gradlew manualOffline`.
 
 To build the distribution artifacts (the `tgz`-s that people can download), run `./gradlew build`. However,
-for a stable (non-`SNAPSHOT`) version number, you must set up signing, or disable that verification;
-see `gradle.properties` in this project for those!
+for a stable (non-`SNAPSHOT`) version number, you must set up signing, or disable that verification
+with `freemarker.allowUnsignedReleaseBuild=true`; see `gradle.properties` in this project for those!
 
 Reproducible builds: If the resulting `freemarker.jar` is not identical with the official jar, see the build environment
 in the `.buildinfo` file packed into the official source distribution, and also into the Maven "sources" artifact! At
@@ -143,7 +143,7 @@ least with identical Java versions, the resulting `freemarker.jar` meant to matc
 To see how the project would be deployed to Maven Central, issue
 `./gradlew publishAllPublicationsToLocalRepository`,
 and check the `build/local-deployment` directory.
-
+ 
 To publish to the Apache Maven Repository (from where you can also promote releases to the Maven Central Repository)
 issue `.\gradlew publish`. Note that for this the following Gradle properties must be properly set
 (in `gradle.properties`, or pass them via `-P<name>=<value>` arguments):

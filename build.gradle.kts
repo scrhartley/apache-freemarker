@@ -522,6 +522,7 @@ val distSrc = tasks.register<Tar>("distSrc") {
                 "osgi.bnd",
                 "rat-excludes",
                 "gradlew.bat",
+                "gradle.properties",
                 "gradle/**"
         )
         exclude(

@@ -259,7 +259,7 @@ class FreemarkerRootExtension constructor(
         .get()
 
     val allowUnsignedReleaseBuild = context.providers
-        .gradleProperty("allowUnsignedReleaseBuild")
+        .gradleProperty("freemarker.allowUnsignedReleaseBuild")
         .map { it.toBoolean() }
         .getOrElse(false)
 
