@@ -33,6 +33,8 @@ import freemarker.template.TemplateModel;
  * {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD}
  * (via {@link BeansWrapper.MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)}). We don't
  * necessarily want to go beyond that hack, as we don't have separate method namespace in the template language.
+ *
+ * @since 2.3.33
  */
 class DotBeforeMethodCall extends Dot {
     public DotBeforeMethodCall(Dot dot) {

@@ -24,11 +24,13 @@ import java.beans.PropertyDescriptor;
 
 import freemarker.ext.beans.BeansWrapper.MethodAppearanceDecision;
 import freemarker.ext.beans.BeansWrapper.MethodAppearanceDecisionInput;
+import freemarker.template.MethodCallAwareTemplateHashModel;
 
 /**
- * Used for customizing how the methods are visible from templates, via
+ * Used for customizing how the Java methods are visible from templates, via
  * {@link BeansWrapper#setMethodAppearanceFineTuner(MethodAppearanceFineTuner)}.
- * The object that implements this should also implement {@link SingletonCustomizer} whenever possible.
+ * The object that implements this should also implement {@link SingletonCustomizer} whenever possible, to allow reusing
+ * the class introspection cache in more situations.
  * 
  * @since 2.3.21
  */
@@ -52,24 +54,24 @@ public interface MethodAppearanceFineTuner {
      *     {@link #process} is not called for those.</li>
      *   <li>Show the method with a different name in the data-model than its
      *     real name by calling
-     *     {@link MethodAppearanceDecision#setExposeMethodAs(String)}
-     *     with non-{@code null} parameter. Also, if set to {@code null}, the method won't be exposed.
-     *     The default is the name of the method. Note that if {@code methodInsteadOfPropertyValueBeforeCall} is
-     *     {@code true}, the method is not exposed if the method name set here is the same as the name of the property
-     *     set for this method with {@link MethodAppearanceDecision#setExposeAsProperty(PropertyDescriptor)}.
+     *     {@link MethodAppearanceDecision#setExposeMethodAs(String)} with non-{@code null} parameter. (If set to
+     *     {@code null}, then the method won't be exposed.) The default is the real name of the method.
+     *     Note that if {@code methodInsteadOfPropertyValueBeforeCall} is {@code true}, the method is not exposed if the
+     *     method name set here is the same as the name of the property set for this method with
+     *     {@link MethodAppearanceDecision#setExposeAsProperty(PropertyDescriptor)}.
      *   <li>Create a fake JavaBean property for this method by calling
      *     {@link MethodAppearanceDecision#setExposeAsProperty(PropertyDescriptor)}.
      *     For example, if you have {@code int size()} in a class, but you
-     *     want it to be accessed from the templates as {@code obj.size},
-     *     rather than as {@code obj.size()}, you can do that with this
-     *     (but remember calling
-     *     {@link MethodAppearanceDecision#setMethodShadowsProperty(boolean)
-     *     setMethodShadowsProperty(false)} as well, if the method name is exactly
-     *     the same as the property name).
+     *     want it to be accessed from the templates as {@code obj.size} (like a JavaBean property),
+     *     rather than as {@code obj.size()}, you can do that with this (but remember calling
+     *     {@link MethodAppearanceDecision#setMethodShadowsProperty(boolean) setMethodShadowsProperty(false)} as well,
+     *     if the method name is exactly the same as the property name).
      *     The default is {@code null}, which means that no fake property is
      *     created for the method. You need not, and shouldn't set this
      *     to non-{@code null} for the property read (get/is) methods of real JavaBeans
-     *     properties, as bean properties are not seen as methods, and are exposed independently of this mechanism.
+     *     properties, as bean properties are not treated as methods (hence the {@link MethodAppearanceFineTuner} is
+     *     irrelevant), and are exposed or not regardless of this mechanism (based on
+     *     {@link BeansWrapperBuilder#setExposureLevel(int)}).
      *     The property name in the {@link PropertyDescriptor} can be anything,
      *     but the method (or methods) in it must belong to the class that
      *     is given as the {@code clazz} parameter, or it must be inherited from
@@ -88,29 +90,22 @@ public interface MethodAppearanceFineTuner {
      *     exposed that as a property via {@link MethodAppearanceDecision#setExposeAsProperty(PropertyDescriptor)}. So
      *     far, you can access the property value from templates as {@code user.name}, but {@code user.name()} will
      *     fail, saying that you try to call a {@code String} (because you apply the {@code ()} operator on the result
-     *     of {@code user.name}). But with
+     *     of {@code user.name}, which is a {@code String}). But with
      *     {@link MethodAppearanceDecision#setMethodInsteadOfPropertyValueBeforeCall(boolean)} {@code true},
-     *     both {@code user.name}, and {@code user.name()} will do the same.
-     *     The default of this is influenced by
+     *     both {@code user.name}, and {@code user.name()} will do the same (which is possible because if {@code user}
+     *     is a {@link MethodCallAwareTemplateHashModel}, "name" can be resoled to different values in the two cases).
+     *     The default (initial) value of {@code methodInsteadOfPropertyValueBeforeCall} depends on
      *     {@link BeansWrapperConfiguration#setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)},
-     *     {@link BeansWrapperConfiguration#setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
-     *   <li>Prevent the method to hide a JavaBeans property (fake or real) of
-     *     the same name by calling
-     *     {@link MethodAppearanceDecision#setMethodShadowsProperty(boolean)}
-     *     with {@code false}. The default is {@code true}, so if you have
-     *     both a property and a method called "foo", then in the template
-     *     {@code myObject.foo} will return the method itself instead
-     *     of the property value, which is often undesirable.
+     *     and {@link BeansWrapperConfiguration#setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
+     *   <li>Prevent the method to hide a JavaBeans property (fake or real) of the same name by calling
+     *     {@link MethodAppearanceDecision#setMethodShadowsProperty(boolean)} with {@code false}.
+     *     The default is {@code true}, so if you have both a property and a method called "foo", then in the template
+     *     {@code myObject.foo} will return the method itself instead of the property value, which is often undesirable.
      * </ul>
-     * 
-     * <p>Note that you can expose a Java method both as a method, and as a
-     * JavaBeans property on the same time, however you have to chose different
-     * names for them to prevent shadowing. 
-     * 
-     * @param in Describes the method about which the decision will have to be made.
+     *
+     * @param in Describes the method about which the decision will be made.
      *  
-     * @param out Stores how the method will be exposed in the
-     *   data-model after {@link #process} returns.
+     * @param out Stores how the method will be exposed in the data-model after {@link #process} returns.
      *   This is initialized so that it reflects the default
      *   behavior of {@link BeansWrapper}, so you don't have to do anything with this
      *   when you don't want to change the default behavior.

@@ -77,7 +77,8 @@ final class ClassIntrospectorBuilder implements Cloneable {
         treatDefaultMethodsAsBeanMembers = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_26;
         defaultZeroArgumentNonVoidMethodPolicy = ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
         recordZeroArgumentNonVoidMethodPolicy = incompatibleImprovements.intValue() >= _VersionInts.V_2_3_33 && _JavaVersions.JAVA_16 != null
-                ? ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD : ZeroArgumentNonVoidMethodPolicy.METHOD_ONLY;
+                ? ZeroArgumentNonVoidMethodPolicy.BOTH_PROPERTY_AND_METHOD
+                : defaultZeroArgumentNonVoidMethodPolicy;
         memberAccessPolicy = DefaultMemberAccessPolicy.getInstance(this.incompatibleImprovements);
     }
 
@@ -166,6 +167,8 @@ final class ClassIntrospectorBuilder implements Cloneable {
     }
 
     /**
+     * The getter pair of {@link #setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
+     *
      * @since 2.3.33
      */
     public ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
@@ -173,6 +176,10 @@ final class ClassIntrospectorBuilder implements Cloneable {
     }
 
     /**
+     * Sets the {@link ZeroArgumentNonVoidMethodPolicy} used for classes that are not records (or any other special
+     * cases we add support for later).
+     * The default value is {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}.
+     *
      * @since 2.3.33
      */
     public void setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy defaultZeroArgumentNonVoidMethodPolicy) {
@@ -181,6 +188,8 @@ final class ClassIntrospectorBuilder implements Cloneable {
     }
 
     /**
+     * The getter pair of {@link #setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)}.
+     *
      * @since 2.3.33
      */
     public ZeroArgumentNonVoidMethodPolicy getRecordZeroArgumentNonVoidMethodPolicy() {
@@ -188,6 +197,13 @@ final class ClassIntrospectorBuilder implements Cloneable {
     }
 
     /**
+     * Sets the {@link ZeroArgumentNonVoidMethodPolicy} used for records.
+     * The default value is {@link ZeroArgumentNonVoidMethodPolicy#BOTH_PROPERTY_AND_METHOD} if
+     * {@link #getIncompatibleImprovements()} is at least 2.3.33, and we are on Java 16 or later, otherwise
+     * it's {@link ZeroArgumentNonVoidMethodPolicy#METHOD_ONLY}.
+     *
+     * @see #setDefaultZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy)  
+     *
      * @since 2.3.33
      */
     public void setRecordZeroArgumentNonVoidMethodPolicy(ZeroArgumentNonVoidMethodPolicy recordZeroArgumentNonVoidMethodPolicy) {
@@ -195,6 +211,11 @@ final class ClassIntrospectorBuilder implements Cloneable {
         this.recordZeroArgumentNonVoidMethodPolicy = recordZeroArgumentNonVoidMethodPolicy;
     }
 
+    /**
+     * Get getter pair of {@link #setMemberAccessPolicy(MemberAccessPolicy)}
+     *
+     * @since 2.3.30
+     */
     public MemberAccessPolicy getMemberAccessPolicy() {
         return memberAccessPolicy;
     }

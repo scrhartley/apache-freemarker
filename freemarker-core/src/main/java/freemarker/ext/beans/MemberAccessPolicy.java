@@ -36,10 +36,15 @@ import freemarker.template.TemplateModel;
  * {@link BeansWrapperBuilder#setMemberAccessPolicy(MemberAccessPolicy)} (or if you use {@link DefaultObjectWrapper},
  * with {@link DefaultObjectWrapperBuilder#setMemberAccessPolicy(MemberAccessPolicy)}).
  *
- * <p>As {@link BeansWrapper}, and its subclasses like {@link DefaultObjectWrapper}, only discover public
+ * <p>As {@link BeansWrapper}, and its subclasses, like {@link DefaultObjectWrapper}, only discover public
  * members, it's pointless to whitelist non-public members. (Also, while public members declared in non-public classes
  * are discovered by {@link BeansWrapper}, Java reflection will not allow accessing those normally, so generally it's
  * not useful to whitelist those either.)
+ *
+ * <p>Note {@link BeansWrapper}, and its subclasses, like {@link DefaultObjectWrapper}, also have an
+ * {@link BeansWrapper#setExposureLevel(int) exposureLevel} a setting that's applied before the
+ * {@link MemberAccessPolicy}, also, with {@link BeansWrapper#EXPOSE_ALL} the {@link MemberAccessPolicy} will be
+ * ignored.
  *
  * <p>Note that if you add {@link TemplateModel}-s directly to the data-model, those are not wrapped by the
  * {@link ObjectWrapper} (from {@link Environment#getObjectWrapper()}), and so the {@link MemberAccessPolicy} won't

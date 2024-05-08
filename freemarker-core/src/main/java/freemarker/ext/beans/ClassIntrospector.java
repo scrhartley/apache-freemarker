@@ -203,7 +203,7 @@ class ClassIntrospector {
         if (recordAware && _JavaVersions.JAVA_16 == null) {
             throw new IllegalArgumentException(
                     "defaultZeroArgumentNonVoidMethodPolicy != recordZeroArgumentNonVoidMethodPolicy, " +
-                    "but Java 16 support is not available.");
+                    "but record support is not available (as Java 16 support is not available).");
         }
         this.incompatibleImprovements = builder.getIncompatibleImprovements();
 
@@ -316,7 +316,7 @@ class ClassIntrospector {
 
         if (introspData.size() > 1) {
             return introspData;
-        } else if (introspData.size() == 0) {
+        } else if (introspData.isEmpty()) {
             return Collections.emptyMap();
         } else { // map.size() == 1
             Entry<Object, Object> e = introspData.entrySet().iterator().next();

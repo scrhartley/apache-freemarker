@@ -252,6 +252,8 @@ public abstract class BeansWrapperConfiguration implements Cloneable {
     }
 
     /**
+     * Getter pair of {@link #setDefaultZeroArgumentNonVoidMethodPolicy}.
+     *
      * @since 2.3.33
      */
     public ZeroArgumentNonVoidMethodPolicy getDefaultZeroArgumentNonVoidMethodPolicy() {
@@ -270,6 +272,8 @@ public abstract class BeansWrapperConfiguration implements Cloneable {
     }
 
     /**
+     * Getter pair of {@link #setRecordZeroArgumentNonVoidMethodPolicy}.
+     *
      * @since 2.3.33
      */
     public ZeroArgumentNonVoidMethodPolicy getRecordZeroArgumentNonVoidMethodPolicy() {
@@ -287,6 +291,9 @@ public abstract class BeansWrapperConfiguration implements Cloneable {
         classIntrospectorBuilder.setRecordZeroArgumentNonVoidMethodPolicy(recordZeroArgumentNonVoidMethodPolicy);
     }
 
+    /**
+     * Getter pair of {@link #setMethodAppearanceFineTuner}
+     */
     public MethodAppearanceFineTuner getMethodAppearanceFineTuner() {
         return classIntrospectorBuilder.getMethodAppearanceFineTuner();
     }
@@ -295,6 +302,8 @@ public abstract class BeansWrapperConfiguration implements Cloneable {
      * See {@link BeansWrapper#setMethodAppearanceFineTuner(MethodAppearanceFineTuner)}; additionally,
      * note that currently setting this to non-{@code null} will disable class introspection cache sharing, unless
      * the value implements {@link SingletonCustomizer}.
+     *
+     * <p>Note that methods in this class are inherited by {@link DefaultObjectWrapperBuilder}, which is what you normally use.
      */
     public void setMethodAppearanceFineTuner(MethodAppearanceFineTuner methodAppearanceFineTuner) {
         classIntrospectorBuilder.setMethodAppearanceFineTuner(methodAppearanceFineTuner);
