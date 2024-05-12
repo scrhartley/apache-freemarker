@@ -21414,7 +21414,7 @@ Primary content continued</programlisting>
           instead.</para>
 
           <para>This directive only has effect on the section that is
-          literally (as in the text editor) inside the nested bock, not on the
+          literally (as in the text editor) inside the nested block, not on the
           parts that are called/included from there.</para>
 
           <para>Example:</para>
@@ -24133,7 +24133,7 @@ or
           instead.</para>
 
           <para>This directive only has effect on the section that is
-          literally (as in the text editor) inside the nested bock, not on the
+          literally (as in the text editor) inside the nested block, not on the
           parts that are called/included from there.</para>
 
           <para>Example:</para>
@@ -24326,7 +24326,7 @@ ${"&amp;"}</programlisting>
           block, the earlier output format is restored.</para>
 
           <para>This directive only has effect on the section that is
-          literally (as in the text editor) inside the nested bock, not on the
+          literally (as in the text editor) inside the nested block, not on the
           parts that are called/included from there.</para>
 
           <para>Example:</para>
